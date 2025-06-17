@@ -83,7 +83,7 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
   console.log(req.body);
   const {  description, duration, date } = req.body; 
 
-  const id = req.body[":_id"];
+  const id = req.params["_id"];
 
     try {
 
@@ -102,10 +102,11 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
       username: user.username, 
       description: data.description, 
       duration: data.duration,
-      date: data.date.toDateString()
+      date: data.date.toDateString(),
+      _id: id
     })
   } catch(e){
-    console.log(e);
+    // console.log(e);
     return res.status(500).json({ message: "Something unexpected happened" });
   }
 
@@ -141,7 +142,7 @@ app.get("/api/users/:_id/logs", async (req, res) => {
     let exerciseQuery = Exercise.find(query).select("-__v");
 
     if(limit){
-      exerciseQuery.limit(limit);
+      exerciseQuery.limit(parseInt(limit));
     }
 
     const exercises = await exerciseQuery;
